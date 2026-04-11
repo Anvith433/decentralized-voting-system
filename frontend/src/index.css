@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+
+@utility glass {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+
+@utility glass-card {
+  @apply glass;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+
+.glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+@layer base {
+  body {
+    background-color: #0A0F1F;
+    color: #f1f5f9;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+}
