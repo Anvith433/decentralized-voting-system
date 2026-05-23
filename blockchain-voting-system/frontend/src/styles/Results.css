@@ -1,0 +1,135 @@
+.royal-results-container {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  max-width: 950px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.royal-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.royal-header h1 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.header-decoration {
+  width: 60px;
+  height: 4px;
+  background: #6c5ce7;
+  margin: 0 auto 15px;
+  border-radius: 10px;
+}
+
+/* ROYAL WINNER CARD */
+.royal-winner-card {
+  background: linear-gradient(135deg, #6c5ce7 0%, #4834d4 100%);
+  border-radius: 24px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 3.5rem;
+  box-shadow: 0 15px 35px rgba(108, 92, 231, 0.4);
+}
+
+.winner-name-text {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 10px 0;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.winner-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.winner-stat-box {
+  margin-top: 1.5rem;
+}
+
+.vote-total {
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: block;
+}
+
+/* GRID STANDINGS */
+.royal-standings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.standing-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid #edf2f7;
+  transition: all 0.3s ease;
+}
+
+.standing-card.gold-tier {
+  border-color: #6c5ce7;
+  background: rgba(108, 92, 231, 0.03);
+}
+
+.rank-label {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #6c5ce7;
+  margin-bottom: 10px;
+}
+
+.progress-royal-container {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-royal-bar {
+  height: 100%;
+  background: #6c5ce7;
+  border-radius: 10px;
+  transition: width 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.vote-count-royal {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4a5568;
+}
+
+/* BUTTON */
+.royal-sync-btn {
+  display: block;
+  margin: 2.5rem auto 0;
+  background: none;
+  border: 2px solid #6c5ce7;
+  color: #6c5ce7;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.royal-sync-btn:hover {
+  background: #6c5ce7;
+  color: white;
+}

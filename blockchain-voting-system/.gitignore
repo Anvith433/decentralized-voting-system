@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables (CRITICAL - DO NOT COMMIT!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Private keys and sensitive data
+private_keys/
+secrets/
+*.pem
+*.key
+
+# Build outputs
+build/
+dist/
+artifacts/
+cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Hardhat
+hardhat.config.updated.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Package managers
+package-lock.json
+yarn.lock
+
+# IDE specific files
+.prettier-ignore
+.eslintcache
+
+# Deployment
+deployment/
+
+# Frontend build
+/frontend/build
+/frontend/.env.local
+
+# Blockchain gas reports
+gas-report.txt
