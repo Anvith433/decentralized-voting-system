@@ -1,106 +1,232 @@
 .election-status {
-  background: white;
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.election-status.active {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  border: 2px solid #667eea;
-}
-
-.election-status.ended {
-  background: linear-gradient(135deg, rgba(192, 57, 43, 0.05) 0%, rgba(231, 76, 60, 0.05) 100%);
-  border: 2px solid #e74c3c;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .election-status.loading {
-  text-align: center;
-  color: #667eea;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 24px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  animation: status-fade 1.2s ease-in-out infinite;
 }
 
 .status-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .status-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
+  gap: 6px;
+  padding: 20px 24px;
+  border-left: 1px solid var(--line);
 }
 
-.election-status.active .status-item {
-  border: 1px solid #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, transparent 100%);
-}
-
-.election-status.ended .status-item {
-  border: 1px solid #e74c3c;
-  background: linear-gradient(135deg, rgba(231, 76, 60, 0.03) 0%, transparent 100%);
+.status-item:first-child {
+  border-left: none;
 }
 
 .status-item .label {
   font-size: 12px;
-  color: #999;
-  margin-bottom: 8px;
-  text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 .status-item .value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.status-item .value small {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 2px;
+}
+
+.status-item .value.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  min-height: 31px;
+}
+
+.status-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
 }
 
 .status-item .value.active {
-  color: #27ae60;
+  color: var(--live);
+}
+
+.status-item .value.active .status-dot {
+  background: var(--live);
+}
+
+/* Soft pulse while voting is open */
+.status-item .value.active .status-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--live);
+  opacity: 0;
+  animation: status-pulse 2s ease-out infinite;
 }
 
 .status-item .value.ended {
-  color: #e74c3c;
+  color: var(--ink-soft);
 }
 
 .status-item .timer {
-  font-family: "Courier New", monospace;
-  font-size: 24px;
-  color: #e74c3c;
-  animation: blink 1s infinite;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  min-height: 31px;
+  display: inline-flex;
+  align-items: center;
 }
 
-@keyframes blink {
+.status-item .results-announced {
+  font-size: 18px;
+  min-height: 31px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.participation-bar {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.participation-bar div {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.winner-display {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.winner-display .label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.winner-display strong {
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+
+.winner-display span:last-child {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.election-footer-note {
+  padding: 12px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-muted);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+@keyframes status-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes status-fade {
   0%,
   100% {
-    opacity: 1;
+    opacity: 0.4;
   }
   50% {
-    opacity: 0.7;
+    opacity: 1;
   }
 }
 
-@media (max-width: 768px) {
-  .election-status {
-    padding: 15px;
-  }
-
+@media (max-width: 860px) {
   .status-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .status-item:nth-child(3) {
+    border-left: none;
+  }
+
+  .status-item:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 600px) {
   .status-item {
-    padding: 10px;
+    padding: 16px;
   }
 
   .status-item .value {
-    font-size: 20px;
+    font-size: 22px;
+  }
+
+  .status-item .value.state {
+    font-size: 17px;
+  }
+
+  .status-item .timer {
+    font-size: 17px;
+  }
+
+  .status-item .results-announced {
+    font-size: 16px;
+  }
+
+  .winner-display,
+  .election-footer-note {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

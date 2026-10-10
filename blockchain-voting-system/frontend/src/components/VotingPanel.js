@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { Web3Context } from "../context/Web3Context";
 import CandidateCard from "./CandidateCard";
+import { ExternalIcon } from "./Icons";
 import "../styles/VotingPanel.css";
 
 const VotingPanel = () => {
@@ -8,7 +9,6 @@ const VotingPanel = () => {
     account,
     contract,
     loading,
-    error,
     castVote,
     getCandidates,
     getVoterStatus,
@@ -69,8 +69,9 @@ const VotingPanel = () => {
 
       const receipt = await castVote(candidateId);
       setTransactionHash(receipt.hash || receipt.transactionHash);
+      const chosen = candidates.find((c) => c.id === candidateId);
       setSuccessMessage(
-        `✓ Vote cast successfully for candidate ${candidateId}!`
+        `Your vote for ${chosen ? chosen.name : `candidate ${candidateId}`} has been recorded.`
       );
 
       setTimeout(loadVoterStatus, 1000);
@@ -89,41 +90,57 @@ const VotingPanel = () => {
     }
   };
 
+  const totalVotes = electionStatus
+    ? parseInt(electionStatus.totalVotesCast, 10) || 0
+    : 0;
+
   return (
     <div className="voting-panel">
       <div className="panel-header">
-        <h2>🗳️ Voting Panel</h2>
-        {!account && (
-          <div className="warning">
-            Please connect your wallet to participate in voting
-          </div>
-        )}
-        {account && voterStatus && !voterStatus.isRegistered && (
-          <div className="warning">
-            Your address is not registered as a voter
-          </div>
-        )}
-        {account && voterStatus && voterStatus.hasVoted && (
-          <div className="success">✓ You have already voted</div>
+        <div>
+          <h2>Ballot</h2>
+          <p className="panel-subtitle">
+            Choose one candidate. Once your vote is confirmed on-chain it
+            can&rsquo;t be changed.
+          </p>
+        </div>
+        {candidates.length > 0 && (
+          <span className="panel-count">
+            {candidates.length}{" "}
+            {candidates.length === 1 ? "candidate" : "candidates"}
+          </span>
         )}
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {!account && (
+        <div className="notice warning">
+          Please connect your wallet to participate in voting.
+        </div>
+      )}
+      {account && voterStatus && !voterStatus.isRegistered && (
+        <div className="notice warning">
+          This wallet address isn&rsquo;t registered as a voter, so it
+          can&rsquo;t cast a ballot.
+        </div>
+      )}
+      {account && voterStatus && voterStatus.hasVoted && (
+        <div className="notice success">
+          You have already voted. Thanks for taking part.
+        </div>
+      )}
 
       {successMessage && (
-        <div className="success-message">
-          <div>{successMessage}</div>
+        <div className="notice success success-message">
+          <span>{successMessage}</span>
           {transactionHash && (
-            <small>
-              Transaction:{" "}
-              <a
-                href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {transactionHash.substring(0, 10)}...
-              </a>
-            </small>
+            <a
+              href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View transaction {transactionHash.substring(0, 10)}…
+              <ExternalIcon size={14} />
+            </a>
           )}
         </div>
       )}
@@ -138,16 +155,17 @@ const VotingPanel = () => {
               isVoting={voting && votingCandidateId === candidate.id}
               hasVoted={voterStatus && voterStatus.hasVoted}
               electionActive={electionStatus && electionStatus.electionActive}
+              totalVotes={totalVotes}
             />
           ))
         ) : (
           <div className="no-candidates">
-            {loading ? "Loading candidates..." : "No candidates registered"}
+            {loading ? "Loading candidates…" : "No candidates registered yet."}
           </div>
         )}
       </div>
 
-      {loading && <div className="loading">Processing...</div>}
+      {loading && <div className="loading">Waiting for the blockchain…</div>}
     </div>
   );
 };

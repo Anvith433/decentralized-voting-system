@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { Web3Context } from "../context/Web3Context";
-import { calculateTimeRemaining } from "../utils/helpers"; 
+import { calculateTimeRemaining } from "../utils/helpers";
+import { LockIcon, RefreshIcon } from "./Icons";
 import "../styles/Results.css";
 
 const Results = () => {
@@ -73,66 +74,81 @@ const Results = () => {
     }
   }, [electionStatus, performForcedLoad]);
 
-  if (!electionStatus) return <div className="royal-msg">Initializing Secure Results...</div>;
+  if (!electionStatus) {
+    return <div className="results-message">Loading results…</div>;
+  }
 
   if (!isForcedOpen) {
     return (
-      <div className="royal-results-container locked-state">
+      <div className="results-container locked-state">
+        <span className="lock-icon">
+          <LockIcon size={20} />
+        </span>
         <div className="locked-content">
-          <span className="lock-icon">🔒</span>
-          <h2>Results are Sealed</h2>
-          <p>The cryptographic results will be automatically decrypted when voting concludes.</p>
+          <h2>Results are sealed</h2>
+          <p>
+            The final tally will appear here automatically as soon as voting
+            closes.
+          </p>
         </div>
       </div>
     );
   }
 
+  const totalCounted = results.reduce((sum, r) => sum + r.votes, 0);
+  const winnerVotes = winner ? parseInt(winner.votes, 10) || 0 : 0;
+
   return (
-    <div className="royal-results-container fade-in">
-      <div className="royal-header">
-        <div className="header-decoration"></div>
-        <h1>Official Election Results</h1>
-        <p className="declaration-date">Finalized Tally</p>
+    <div className="results-container fade-in">
+      <div className="results-header">
+        <div>
+          <h2>Election results</h2>
+          <p className="results-subtitle">Final tally, read from the contract</p>
+        </div>
+        <button
+          className="refresh-button"
+          onClick={performForcedLoad}
+          disabled={loading}
+        >
+          <RefreshIcon size={15} className={loading ? "spinning" : ""} />
+          {loading ? "Refreshing…" : "Refresh"}
+        </button>
       </div>
 
-      {/* ROYAL WINNER SECTION */}
       {winner && (
-        <div className="royal-winner-card">
-          <div className="winner-glow"></div>
-          <div className="winner-body">
-            <div className="crown-icon">🏆</div>
-            <span className="winner-badge">ELECTED REPRESENTATIVE</span>
-            <h2 className="winner-name-text">{winner.name}</h2>
-            <div className="winner-stat-box">
-              <span className="vote-total">{winner.votes}</span>
-              <span className="vote-label">Verified Votes</span>
-            </div>
-          </div>
+        <div className="winner-card">
+          <span className="winner-badge">Winner</span>
+          <h3 className="winner-name">{winner.name}</h3>
+          <p className="winner-stat">
+            <strong>{winnerVotes}</strong> {winnerVotes === 1 ? "vote" : "votes"}
+            {totalCounted > 0 && (
+              <> &middot; {((winnerVotes / totalCounted) * 100).toFixed(1)}% of votes cast</>
+            )}
+          </p>
         </div>
       )}
 
-      {/* FULL STANDINGS GRID */}
-      <div className="royal-standings-grid">
+      <ol className="standings">
         {results.map((candidate, index) => (
-          <div key={index} className={`standing-card ${index === 0 ? 'gold-tier' : ''}`}>
-            <div className="rank-label">RANK {index + 1}</div>
-            <div className="candidate-row-info">
-              <h3>{candidate.name}</h3>
-              <div className="progress-royal-container">
-                <div 
-                  className="progress-royal-bar" 
-                  style={{ width: `${maxVotes > 0 ? (candidate.votes / maxVotes) * 100 : 0}%` }}
-                ></div>
-              </div>
-              <span className="vote-count-royal">{candidate.votes} votes</span>
+          <li
+            key={candidate.id}
+            className={`standing-row ${index === 0 ? "leading" : ""}`}
+          >
+            <span className="rank">{index + 1}</span>
+            <span className="standing-name">{candidate.name}</span>
+            <div className="standing-bar" aria-hidden="true">
+              <div
+                style={{
+                  width: `${maxVotes > 0 ? (candidate.votes / maxVotes) * 100 : 0}%`,
+                }}
+              />
             </div>
-          </div>
+            <span className="standing-votes">
+              {candidate.votes} <small>{candidate.votes === 1 ? "vote" : "votes"}</small>
+            </span>
+          </li>
         ))}
-      </div>
-
-      <button className="royal-sync-btn" onClick={performForcedLoad}>
-        {loading ? "Synchronizing..." : "🔄 Refresh Results"}
-      </button>
+      </ol>
     </div>
   );
 };

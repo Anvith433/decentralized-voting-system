@@ -1,106 +1,93 @@
 .voting-panel {
-  background: white;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
 }
 
 .panel-header {
-  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .panel-header h2 {
   font-size: 28px;
-  color: #2c3e50;
-  margin-bottom: 15px;
+  margin-bottom: 6px;
 }
 
-.warning {
-  background: #fff3cd;
-  color: #856404;
-  padding: 12px 15px;
-  border-radius: 5px;
-  border-left: 4px solid #ffc107;
-  margin-top: 10px;
+.panel-subtitle {
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 48em;
 }
 
-.success {
-  background: #d4edda;
-  color: #155724;
-  padding: 12px 15px;
-  border-radius: 5px;
-  border-left: 4px solid #28a745;
-  margin-top: 10px;
-}
-
-.error-message {
-  background: #fee;
-  color: #c00;
-  padding: 12px 15px;
-  border-radius: 5px;
-  border-left: 4px solid #c00;
-  margin-bottom: 20px;
+.panel-count {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  white-space: nowrap;
 }
 
 .success-message {
-  background: #d4edda;
-  color: #155724;
-  padding: 15px;
-  border-radius: 5px;
-  border-left: 4px solid #28a745;
-  margin-bottom: 20px;
-}
-
-.success-message small {
-  display: block;
-  margin-top: 8px;
-  font-size: 12px;
-  opacity: 0.8;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px 16px;
 }
 
 .success-message a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: inherit;
+  font-family: var(--font-mono);
+  font-size: 13px;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .success-message a:hover {
   text-decoration: underline;
 }
 
+/* The ballot: one bordered sheet with a row per candidate */
 .candidates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
-  margin: 30px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .no-candidates {
-  grid-column: 1 / -1;
   text-align: center;
   padding: 40px 20px;
-  color: #999;
-  font-size: 16px;
+  color: var(--muted);
+  font-size: 15px;
 }
 
 .loading {
-  text-align: center;
-  padding: 20px;
-  color: #667eea;
-  font-weight: 500;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .voting-panel {
-    padding: 20px;
+    padding: 20px 16px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .panel-header h2 {
     font-size: 24px;
-  }
-
-  .candidates-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
   }
 }
