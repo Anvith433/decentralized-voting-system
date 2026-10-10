@@ -1,135 +1,244 @@
-.royal-results-container {
-  background: white;
-  border-radius: 24px;
-  padding: 3rem;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-  max-width: 950px;
-  margin: 2rem auto;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+.results-container {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
 }
 
-.royal-header {
-  text-align: center;
-  margin-bottom: 3rem;
+.results-message {
+  color: var(--muted);
+  font-size: 15px;
+  padding: 8px 0;
 }
 
-.royal-header h1 {
-  font-size: 2.2rem;
-  color: #2c3e50;
-  font-weight: 800;
-  margin-bottom: 5px;
+/* Sealed state while voting is open */
+.results-container.locked-state {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 28px;
+  background: var(--surface-muted);
+  border-style: dashed;
+  border-color: var(--line-strong);
 }
 
-.header-decoration {
-  width: 60px;
-  height: 4px;
-  background: #6c5ce7;
-  margin: 0 auto 15px;
-  border-radius: 10px;
+.lock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  flex-shrink: 0;
 }
 
-/* ROYAL WINNER CARD */
-.royal-winner-card {
-  background: linear-gradient(135deg, #6c5ce7 0%, #4834d4 100%);
-  border-radius: 24px;
-  padding: 3.5rem 2rem;
-  text-align: center;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 3.5rem;
-  box-shadow: 0 15px 35px rgba(108, 92, 231, 0.4);
+.locked-content h2 {
+  font-size: 19px;
+  margin-bottom: 2px;
 }
 
-.winner-name-text {
-  font-size: 3.5rem;
-  font-weight: 900;
-  margin: 10px 0;
-  text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+.locked-content p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Results */
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.results-header h2 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.results-subtitle {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.refresh-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--surface);
+  color: var(--ink-soft);
+  border: 1px solid var(--line-strong);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+
+.refresh-button:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.refresh-button .spinning {
+  animation: results-spin 0.9s linear infinite;
+}
+
+.winner-card {
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  padding: 24px 24px 22px;
+  margin-bottom: 24px;
 }
 
 .winner-badge {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 18px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
 }
 
-.winner-stat-box {
-  margin-top: 1.5rem;
+.winner-name {
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  margin: 4px 0 8px;
+  overflow-wrap: anywhere;
 }
 
-.vote-total {
-  font-size: 1.8rem;
-  font-weight: 800;
-  display: block;
+.winner-stat {
+  color: var(--muted);
+  font-size: 15px;
 }
 
-/* GRID STANDINGS */
-.royal-standings-grid {
+.winner-stat strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Standings table */
+.standings {
+  list-style: none;
+}
+
+.standing-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: 28px minmax(120px, 1fr) minmax(120px, 2fr) 84px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
 }
 
-.standing-card {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 18px;
-  border: 1px solid #edf2f7;
-  transition: all 0.3s ease;
+.standing-row:first-child {
+  border-top: none;
 }
 
-.standing-card.gold-tier {
-  border-color: #6c5ce7;
-  background: rgba(108, 92, 231, 0.03);
+.rank {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--muted);
 }
 
-.rank-label {
-  font-size: 0.75rem;
-  font-weight: 900;
-  color: #6c5ce7;
-  margin-bottom: 10px;
+.standing-name {
+  font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-.progress-royal-container {
+.standing-row.leading .standing-name {
+  font-weight: 600;
+}
+
+.standing-bar {
   height: 6px;
-  background: #e2e8f0;
-  border-radius: 10px;
-  margin: 10px 0;
+  border-radius: 999px;
+  background: var(--line);
   overflow: hidden;
 }
 
-.progress-royal-bar {
+.standing-bar div {
   height: 100%;
-  background: #6c5ce7;
-  border-radius: 10px;
-  transition: width 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  border-radius: 999px;
+  background: var(--line-strong);
+  transition: width 0.8s ease;
 }
 
-.vote-count-royal {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #4a5568;
+.standing-row.leading .standing-bar div {
+  background: var(--accent);
 }
 
-/* BUTTON */
-.royal-sync-btn {
-  display: block;
-  margin: 2.5rem auto 0;
-  background: none;
-  border: 2px solid #6c5ce7;
-  color: #6c5ce7;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
+.standing-votes {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
-.royal-sync-btn:hover {
-  background: #6c5ce7;
-  color: white;
+.standing-votes small {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.fade-in {
+  animation: results-fade 0.4s ease-out;
+}
+
+@keyframes results-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes results-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .results-container {
+    padding: 20px 16px;
+  }
+
+  .results-container.locked-state {
+    padding: 18px 16px;
+  }
+
+  .results-header h2 {
+    font-size: 24px;
+  }
+
+  .winner-card {
+    padding: 18px;
+  }
+
+  .winner-name {
+    font-size: 28px;
+  }
+
+  .standing-row {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    gap: 8px 12px;
+  }
+
+  .standing-bar {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
 }

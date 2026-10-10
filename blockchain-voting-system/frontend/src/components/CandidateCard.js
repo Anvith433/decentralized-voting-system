@@ -1,57 +1,70 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { CheckIcon } from "./Icons";
 import "../styles/CandidateCard.css";
 
-const CandidateCard = ({ candidate, onVote, isVoting, hasVoted, electionActive }) => {
+const CandidateCard = ({
+  candidate,
+  onVote,
+  isVoting,
+  hasVoted,
+  electionActive,
+  totalVotes,
+}) => {
   const handleVote = () => {
     if (onVote) {
       onVote(candidate.id);
     }
   };
 
+  const votes = parseInt(candidate.votes, 10) || 0;
+  const share = totalVotes > 0 ? Math.min((votes / totalVotes) * 100, 100) : 0;
+
   return (
-    <div className="candidate-card">
-      <div className="card-header">
-        <h3>{candidate.name}</h3>
-        <div className="candidate-id">ID: {candidate.id}</div>
+    <article className="candidate-card">
+      <div className="candidate-id" aria-label={`Candidate ${candidate.id}`}>
+        {String(candidate.id).padStart(2, "0")}
       </div>
 
       <div className="card-body">
-        <p className="description">{candidate.description}</p>
+        <h3>{candidate.name}</h3>
+        {candidate.description && (
+          <p className="description">{candidate.description}</p>
+        )}
 
         <div className="vote-stats">
-          <div className="vote-count">
-            <span className="label">Votes:</span>
-            <span className="value">{candidate.votes || 0}</span>
+          <div className="progress-bar" aria-hidden="true">
+            <div className="progress-fill" style={{ width: `${share}%` }} />
           </div>
-          <div className="vote-percentage">
-            <span className="label">Progress</span>
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${(candidate.votes || 0) * 5}%` }}
-              />
-            </div>
-          </div>
+          <span className="vote-count">
+            {votes} {votes === 1 ? "vote" : "votes"}
+            {totalVotes > 0 && (
+              <span className="vote-share"> · {share.toFixed(0)}%</span>
+            )}
+          </span>
         </div>
       </div>
 
       <div className="card-footer">
         {hasVoted ? (
-          <div className="already-voted">✓ You have voted</div>
+          <span className="already-voted">
+            <CheckIcon size={15} />
+            Ballot cast
+          </span>
         ) : electionActive ? (
           <button
             className="vote-button"
             onClick={handleVote}
             disabled={isVoting}
+            aria-label={`Vote for ${candidate.name}`}
           >
-            {isVoting ? "Voting..." : "Vote for " + candidate.name}
+            {isVoting ? "Submitting…" : "Vote"}
           </button>
         ) : (
-          <div className="election-ended">Election Ended</div>
+          <span className="election-ended">Closed</span>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -66,12 +79,14 @@ CandidateCard.propTypes = {
   isVoting: PropTypes.bool,
   hasVoted: PropTypes.bool,
   electionActive: PropTypes.bool,
+  totalVotes: PropTypes.number,
 };
 
 CandidateCard.defaultProps = {
   isVoting: false,
   hasVoted: false,
   electionActive: true,
+  totalVotes: 0,
 };
 
 export default CandidateCard;

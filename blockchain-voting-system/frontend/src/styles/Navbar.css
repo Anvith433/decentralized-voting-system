@@ -1,114 +1,162 @@
 .navbar {
-  background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
-  color: white;
-  padding: 15px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .navbar-container {
-  max-width: 1200px;
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 14px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
 
-.navbar-brand h1 {
-  font-size: 24px;
-  margin: 0;
+.navbar-brand {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
-.tagline {
-  font-size: 12px;
-  opacity: 0.8;
-  display: block;
-  margin-top: 3px;
-  font-weight: normal;
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.navbar-brand h1 {
+  font-size: 19px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .navbar-info {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
-
-.network-info {
-  display: flex;
-  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .network-badge {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  background: var(--surface-muted);
+}
+
+.network-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--live);
 }
 
 .wallet-button {
-  background: #27ae60;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .wallet-button:hover:not(:disabled) {
-  background: #229954;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .wallet-button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .wallet-button.connected {
-  background: #3498db;
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line-strong);
+  font-weight: 500;
 }
 
-.wallet-button.connected:hover {
-  background: #2980b9;
+.wallet-button.connected:hover:not(:disabled) {
+  background: var(--danger-soft);
+  border-color: #f0c9c3;
+  color: var(--danger);
 }
 
-.wallet-icon {
-  font-size: 16px;
+.wallet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--live);
 }
 
-@media (max-width: 768px) {
+.wallet-address {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* Swap the address for "Disconnect" on hover so the action is clear */
+.wallet-disconnect {
+  display: none;
+}
+
+.wallet-button.connected:hover .wallet-address {
+  display: none;
+}
+
+.wallet-button.connected:hover .wallet-disconnect {
+  display: inline;
+}
+
+.wallet-button.connected:hover .wallet-dot {
+  background: var(--danger);
+}
+
+@media (max-width: 600px) {
   .navbar-container {
-    flex-direction: column;
-    gap: 15px;
+    padding: 12px 16px;
   }
 
   .navbar-brand h1 {
-    font-size: 20px;
-  }
-
-  .navbar-info {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .wallet-button {
-    width: 100%;
-    justify-content: center;
+    font-size: 17px;
   }
 
   .network-badge {
+    display: none;
+  }
+
+  .wallet-button {
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-long {
     display: none;
   }
 }

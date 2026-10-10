@@ -76,7 +76,8 @@ const ElectionStatus = ({ status, contract, commissionerAddress, onElectionEnd }
   if (!status) {
     return (
       <div className="election-status loading">
-        <p>Loading election status...</p>
+        <span className="loading-dot" />
+        <p>Loading election status…</p>
       </div>
     );
   }
@@ -84,58 +85,69 @@ const ElectionStatus = ({ status, contract, commissionerAddress, onElectionEnd }
   // Final determination of status for the UI
   const displayActive = status.electionActive && isLocallyActive;
 
+  const participation =
+    status.registeredVoters > 0
+      ? Math.min(
+          ((status.totalVotesCast || 0) / status.registeredVoters) * 100,
+          100
+        )
+      : 0;
+
   return (
     <div className={`election-status ${displayActive ? "active" : "ended"}`}>
       <div className="status-grid">
         <div className="status-item">
-          <span className="label">Election Status:</span>
-          <span className={`value ${displayActive ? "active" : "ended"}`}>
-            {displayActive ? "🟢 Active" : "🔴 Ended"}
+          <span className="label">Election status</span>
+          <span className={`value state ${displayActive ? "active" : "ended"}`}>
+            <span className="status-dot" />
+            {displayActive ? "Voting open" : "Voting closed"}
           </span>
         </div>
 
         {displayActive ? (
           <div className="status-item">
-            <span className="label">Time Remaining:</span>
+            <span className="label">Time remaining</span>
             <span className="value timer">{timeRemaining}</span>
           </div>
         ) : (
           <div className="status-item">
-            <span className="label">Result Status:</span>
+            <span className="label">Result status</span>
             <span className="value results-announced">
-              {isEndingOnChain ? "⏳ Finalizing On-Chain..." : "📢 Results Announced"}
+              {isEndingOnChain ? "Finalizing on-chain…" : "Results announced"}
             </span>
           </div>
         )}
 
         <div className="status-item">
-          <span className="label">Total Votes Cast:</span>
+          <span className="label">Votes cast</span>
           <span className="value">{status.totalVotesCast || 0}</span>
         </div>
 
         <div className="status-item">
-          <span className="label">Participation:</span>
+          <span className="label">Participation</span>
           <span className="value">
-            {status.registeredVoters > 0
-              ? (((status.totalVotesCast || 0) / status.registeredVoters) * 100).toFixed(1)
-              : 0}
-            %
+            {participation.toFixed(1)}
+            <small>%</small>
           </span>
+          <div className="participation-bar" aria-hidden="true">
+            <div style={{ width: `${participation}%` }} />
+          </div>
         </div>
       </div>
 
       {/* Show the winner results if they exist in the status object */}
       {!displayActive && status.winner && (
         <div className="winner-display">
-          <h3>🏆 Winner: {status.winner.name}</h3>
-          <p>Final Count: {status.winner.voteCount.toString()} votes</p>
+          <span className="label">Winner</span>
+          <strong>{status.winner.name}</strong>
+          <span>{status.winner.voteCount.toString()} votes</span>
         </div>
       )}
 
       {!displayActive && (
         <div className="election-footer-note">
-          {isEndingOnChain 
-            ? "Updating blockchain records... please sign the MetaMask transaction." 
+          {isEndingOnChain
+            ? "Updating blockchain records… please sign the MetaMask transaction."
             : "The election has concluded. Results are finalized."}
         </div>
       )}
